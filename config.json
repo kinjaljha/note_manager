@@ -1,4 +1,4 @@
 {
-    "db_url": "mongodb://localhost:27017/test_delete_this",
+    "db_url": "mongodb://localhost:27017/note_db",
     "secret": "supersecret"
 }
