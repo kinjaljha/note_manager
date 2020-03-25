@@ -4,7 +4,9 @@ const uuidv1 = require("uuid/v1");
 
 async function deleteNote(req, res) {
     try {
-        let query = { note_id: req.params.id };
+        let query = { note_id: req.params.id, 
+            assignee: req.user.email,           
+        };
         date = Date.now();
         let newvalues = { $set: { deleted_at: date } };
 
@@ -27,7 +29,9 @@ async function deleteNote(req, res) {
 
 async function updateNote(req, res) {
     try {
-        let query = { note_id: req.params.id };
+        let query = { note_id: req.params.id,
+            assignee: req.user.email,           
+        };
         let newvalues = { $set: req.body };
         let note = await Note.findOne(query);
         if (note.deleted_at)
@@ -48,7 +52,9 @@ async function updateNote(req, res) {
 
 async function getNotes(req, res) {
     try {
-        let query = { deleted_at: null };
+        let query = { deleted_at: null,
+            assignee: req.user.email,           
+        };
         let projections = {
             note_id: 1,
             note_title: 1,
@@ -70,6 +76,7 @@ async function getNote(req, res) {
         let query = {
             note_id: req.params.id,
             deleted_at: null,
+            assignee: req.user.email           
         };
         let projections = {
             note_id: 1,
@@ -93,7 +100,8 @@ async function createNote(req, res) {
         let note = new Note({
             note_id: uuidv1(),
             note_title: req.body.title || "Untitled Note",
-            note_body: req.body.content        
+            note_body: req.body.content,
+            assignee: req.user.email           
         });
         let resp = await note.save();
         return res.status(201).json({ message: "Note Created successfully", resp });
